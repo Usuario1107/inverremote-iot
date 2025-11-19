@@ -1,16 +1,96 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Inicio - Sistema IoT">
+  <Navigation />
+  
+  <main class="px-4 py-6 pb-20">
+    <div class="text-center mb-8">
+      <div class="text-6xl mb-4">🔌</div>
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        Sistema IoT
+      </h1>
+      <p class="text-base md:text-xl text-gray-600 px-2">
+        Monitorea y controla tus dispositivos en tiempo real
+      </p>
+    </div>
+
+    <div class="space-y-4 max-w-lg mx-auto mb-8">
+      <!-- Card Inicio -->
+      <div class="bg-white p-5 rounded-xl shadow-md active:scale-95 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-blue-600 text-4xl">🏠</div>
+          <div>
+            <h3 class="text-lg font-semibold mb-1">Inicio</h3>
+            <p class="text-gray-600 text-sm">
+              Información general del sistema
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Sensores -->
+      <a href="/sensores" class="block">
+        <div class="bg-white p-5 rounded-xl shadow-md active:scale-95 transition">
+          <div class="flex items-center space-x-4">
+            <div class="text-green-600 text-4xl">📊</div>
+            <div>
+              <h3 class="text-lg font-semibold mb-1">Sensores</h3>
+              <p class="text-gray-600 text-sm">
+                Datos en tiempo real sin login
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card Configuración -->
+      <a href="/configuracion" class="block">
+        <div class="bg-white p-5 rounded-xl shadow-md active:scale-95 transition">
+          <div class="flex items-center space-x-4">
+            <div class="text-purple-600 text-4xl">⚙️</div>
+            <div>
+              <h3 class="text-lg font-semibold mb-1">Configuración</h3>
+              <p class="text-gray-600 text-sm">
+                Ajustes (requiere login)
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl max-w-lg mx-auto">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">
+        ✨ Características
+      </h2>
+      <ul class="space-y-3 text-gray-700 text-sm">
+        <li class="flex items-start">
+          <span class="mr-2">✔️</span>
+          <span>Visualización de sensores en tiempo real</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">✔️</span>
+          <span>Control de acceso con Firebase Auth</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">✔️</span>
+          <span>Interfaz rápida con Astro y Tailwind</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">✔️</span>
+          <span>Base de datos Firebase Realtime</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Badge de Beta -->
+    <div class="mt-8 text-center">
+      <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-4 py-2 rounded-full">
+        🚧 VERSIÓN BETA
+      </span>
+    </div>
+  </main>
+</Layout>

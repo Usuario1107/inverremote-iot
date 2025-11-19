@@ -1,0 +1,74 @@
+---
+---
+
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="px-4 py-3">
+    <div class="flex justify-between items-center">
+      <!-- Logo/Título -->
+      <div class="flex items-center">
+        <h1 class="text-lg font-bold text-gray-800"> InverRemote</h1>
+      </div>
+
+      <!-- Menú hamburguesa -->
+      <button id="menuToggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <!-- Enlaces desktop -->
+      <div class="hidden md:flex space-x-6">
+        <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition">
+          Inicio
+        </a>
+        <a href="/sensores" class="text-gray-700 hover:text-blue-600 font-medium transition">
+          Sensores
+        </a>
+        <a href="/configuracion" class="text-gray-700 hover:text-blue-600 font-medium transition">
+          Configuración
+        </a>
+      </div>
+
+      <!-- Botón de login desktop -->
+      <div class="hidden md:block">
+        <button id="loginBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+          Iniciar Sesión
+        </button>
+        <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition text-sm hidden">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div id="mobileMenu" class="hidden md:hidden mt-4 pb-2 space-y-2">
+      <a href="/" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition">
+        🏠 Inicio
+      </a>
+      <a href="/sensores" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition">
+        📊 Sensores
+      </a>
+      <a href="/configuracion" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition">
+        ⚙️ Configuración
+      </a>
+      <div class="pt-2 border-t border-gray-200">
+        <button id="loginBtnMobile" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition">
+          Iniciar Sesión
+        </button>
+        <button id="logoutBtnMobile" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition hidden">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Toggle menú móvil
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  menuToggle?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>
