@@ -17,107 +17,124 @@ import Navigation from '../components/Navigation.astro';
       </p>
     </div>
 
-    <!-- Alerta de autenticación -->
-    <div id="authWarning" class="max-w-lg mx-auto mb-6 bg-orange-50 border border-orange-200 rounded-lg p-4">
-      <div class="flex items-center space-x-3">
-        <span class="text-2xl">🔒</span>
-        <div>
-          <p class="text-sm font-medium text-orange-800 mb-1">
-            Debes iniciar sesión para modificar
-          </p>
-          <p class="text-xs text-orange-600">
-            Puedes ver, pero no editar sin autenticarte
-          </p>
+    <!-- Botón de autenticación -->
+    <div id="authWarning" class="max-w-lg mx-auto mb-6">
+      <button id="authButton" class="w-full bg-orange-50 border-2 border-orange-200 rounded-xl p-4 hover:bg-orange-100 active:scale-98 transition-all">
+        <div class="flex items-center justify-center space-x-3">
+          <span class="text-2xl">🔒</span>
+          <div>
+            <p class="text-sm font-semibold text-orange-800">
+              Debes iniciar sesión para modificar
+            </p>
+            <p class="text-xs text-orange-600">
+              Toca aquí para autenticarte
+            </p>
+          </div>
         </div>
-      </div>
+      </button>
     </div>
 
-    <!-- Formulario de configuración -->
+    <!-- Cards de configuración -->
     <div class="max-w-lg mx-auto space-y-4">
       
-      <!-- Intervalo de actualización -->
+      <!-- 1. Duración en minutos -->
       <div class="bg-white p-5 rounded-xl shadow-md">
-        <label class="block text-sm font-semibold text-gray-700 mb-3">
-          📡 Intervalo de Actualización
-        </label>
-        <div class="flex items-center space-x-3">
-          <input 
-            type="range" 
-            min="5" 
-            max="60" 
-            value="10" 
-            id="intervalo"
-            class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled
-          />
-          <span class="text-lg font-bold text-gray-900 min-w-[60px]" id="intervaloValue">
-            10s
-          </span>
+        <div class="flex items-center justify-between mb-3">
+          <label class="flex items-center space-x-2">
+            <span class="text-2xl">⏱️</span>
+            <span class="text-sm font-semibold text-gray-700">Duración en minutos</span>
+          </label>
+          <button class="editBtn hidden px-3 py-1 bg-blue-500 text-white text-xs rounded-lg font-semibold hover:bg-blue-600 active:scale-95 transition" data-config="duracion">
+            Editar
+          </button>
         </div>
-        <p class="text-xs text-gray-500 mt-2">
-          Frecuencia de envío de datos desde el sensor
+        <div class="text-center">
+          <span id="duracion-value" class="text-3xl font-bold text-gray-900">2</span>
+          <span class="text-lg text-gray-600 ml-1">min</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">
+          Tiempo que riega la bomba
         </p>
       </div>
 
-      <!-- Umbral de temperatura -->
+      <!-- 2. Hora programada -->
       <div class="bg-white p-5 rounded-xl shadow-md">
-        <label class="block text-sm font-semibold text-gray-700 mb-3">
-          🌡️ Umbral de Temperatura (°C)
-        </label>
-        <input 
-          type="number" 
-          value="30" 
-          id="umbralTemp"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-lg font-semibold text-center disabled:opacity-50 disabled:bg-gray-50"
-          disabled
-        />
-        <p class="text-xs text-gray-500 mt-2">
-          Alerta si la temperatura supera este valor
+        <div class="flex items-center justify-between mb-3">
+          <label class="flex items-center space-x-2">
+            <span class="text-2xl">🕐</span>
+            <span class="text-sm font-semibold text-gray-700">Hora programada</span>
+          </label>
+          <button class="editBtn hidden px-3 py-1 bg-blue-500 text-white text-xs rounded-lg font-semibold hover:bg-blue-600 active:scale-95 transition" data-config="hora">
+            Editar
+          </button>
+        </div>
+        <div class="text-center">
+          <span id="hora-value" class="text-3xl font-bold text-gray-900">21:06</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">
+          Hora de riego diario automático
         </p>
       </div>
 
-      <!-- Modo nocturno -->
+      <!-- 3. Umbral de humedad -->
       <div class="bg-white p-5 rounded-xl shadow-md">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <span class="text-2xl">🌙</span>
-            <div>
-              <p class="font-semibold text-gray-700">Modo Nocturno</p>
-              <p class="text-xs text-gray-500">Reduce frecuencia 22:00-6:00</p>
-            </div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="modoNocturno" class="sr-only peer" disabled>
-            <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
+        <div class="flex items-center justify-between mb-3">
+          <label class="flex items-center space-x-2">
+            <span class="text-2xl">💧</span>
+            <span class="text-sm font-semibold text-gray-700">Umbral de humedad</span>
           </label>
+          <button class="editBtn hidden px-3 py-1 bg-blue-500 text-white text-xs rounded-lg font-semibold hover:bg-blue-600 active:scale-95 transition" data-config="humedad">
+            Editar
+          </button>
         </div>
+        <div class="text-center">
+          <span id="humedad-value" class="text-3xl font-bold text-gray-900">65</span>
+          <span class="text-lg text-gray-600 ml-1">%</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">
+          Activa bomba si supera este valor
+        </p>
       </div>
 
-      <!-- Alertas activas -->
+      <!-- 4. Temperatura máxima ventilador -->
       <div class="bg-white p-5 rounded-xl shadow-md">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <span class="text-2xl">🔔</span>
-            <div>
-              <p class="font-semibold text-gray-700">Alertas Activas</p>
-              <p class="text-xs text-gray-500">Notificaciones en tiempo real</p>
-            </div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="alertas" class="sr-only peer" checked disabled>
-            <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
+        <div class="flex items-center justify-between mb-3">
+          <label class="flex items-center space-x-2">
+            <span class="text-2xl">🌡️</span>
+            <span class="text-sm font-semibold text-gray-700">Temp. máx ventilador</span>
           </label>
+          <button class="editBtn hidden px-3 py-1 bg-blue-500 text-white text-xs rounded-lg font-semibold hover:bg-blue-600 active:scale-95 transition" data-config="tempVent">
+            Editar
+          </button>
         </div>
+        <div class="text-center">
+          <span id="tempVent-value" class="text-3xl font-bold text-gray-900">16</span>
+          <span class="text-lg text-gray-600 ml-1">°C</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">
+          Enciende ventilador si supera esta temperatura
+        </p>
       </div>
 
-      <!-- Botón guardar -->
-      <button 
-        id="guardarBtn"
-        class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition"
-        disabled
-      >
-        💾 Guardar Cambios
-      </button>
+      <!-- 5. Temperatura mínima luz -->
+      <div class="bg-white p-5 rounded-xl shadow-md">
+        <div class="flex items-center justify-between mb-3">
+          <label class="flex items-center space-x-2">
+            <span class="text-2xl">💡</span>
+            <span class="text-sm font-semibold text-gray-700">Temp. mín luz</span>
+          </label>
+          <button class="editBtn hidden px-3 py-1 bg-blue-500 text-white text-xs rounded-lg font-semibold hover:bg-blue-600 active:scale-95 transition" data-config="tempLuz">
+            Editar
+          </button>
+        </div>
+        <div class="text-center">
+          <span id="tempLuz-value" class="text-3xl font-bold text-gray-900">26</span>
+          <span class="text-lg text-gray-600 ml-1">°C</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">
+          Enciende luces si baja de esta temperatura
+        </p>
+      </div>
 
     </div>
 
@@ -128,18 +145,271 @@ import Navigation from '../components/Navigation.astro';
       </p>
     </div>
   </main>
+
+  <!-- Modal: Duración en minutos -->
+  <div id="modal-duracion" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#1a1d29] rounded-xl w-full max-w-sm p-6 relative animate-fade-in shadow-2xl">
+      <button class="closeModal absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+      
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">⏱️</div>
+        <h3 class="text-xl font-bold text-white">Duración de riego</h3>
+        <p class="text-sm text-gray-400 mt-1">Tiempo en minutos</p>
+      </div>
+
+      <div class="mb-6">
+        <input 
+          type="number" 
+          id="input-duracion"
+          min="1"
+          max="60"
+          class="w-full px-4 py-3 bg-[#0f1117] border-2 border-gray-700 rounded-lg text-white text-center text-2xl font-bold focus:border-blue-500 focus:outline-none"
+          value="2"
+        />
+        <p class="text-xs text-gray-500 mt-2 text-center">Rango: 1-60 minutos</p>
+      </div>
+
+      <button class="saveBtn w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 active:scale-95 transition" data-config="duracion">
+        💾 Guardar cambios
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Hora programada -->
+  <div id="modal-hora" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#1a1d29] rounded-xl w-full max-w-sm p-6 relative animate-fade-in shadow-2xl">
+      <button class="closeModal absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+      
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">🕐</div>
+        <h3 class="text-xl font-bold text-white">Hora de riego</h3>
+        <p class="text-sm text-gray-400 mt-1">Formato 24 horas</p>
+      </div>
+
+      <div class="mb-6">
+        <input 
+          type="time" 
+          id="input-hora"
+          class="w-full px-4 py-3 bg-[#0f1117] border-2 border-gray-700 rounded-lg text-white text-center text-2xl font-bold focus:border-blue-500 focus:outline-none"
+          value="21:06"
+        />
+        <p class="text-xs text-gray-500 mt-2 text-center">Hora diaria de activación automática</p>
+      </div>
+
+      <button class="saveBtn w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 active:scale-95 transition" data-config="hora">
+        💾 Guardar cambios
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Umbral de humedad -->
+  <div id="modal-humedad" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#1a1d29] rounded-xl w-full max-w-sm p-6 relative animate-fade-in shadow-2xl">
+      <button class="closeModal absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+      
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">💧</div>
+        <h3 class="text-xl font-bold text-white">Umbral de humedad</h3>
+        <p class="text-sm text-gray-400 mt-1">Porcentaje de activación</p>
+      </div>
+
+      <div class="mb-6">
+        <input 
+          type="number" 
+          id="input-humedad"
+          min="0"
+          max="100"
+          class="w-full px-4 py-3 bg-[#0f1117] border-2 border-gray-700 rounded-lg text-white text-center text-2xl font-bold focus:border-blue-500 focus:outline-none"
+          value="65"
+        />
+        <p class="text-xs text-gray-500 mt-2 text-center">Rango: 0-100%</p>
+      </div>
+
+      <button class="saveBtn w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 active:scale-95 transition" data-config="humedad">
+        💾 Guardar cambios
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Temperatura máxima ventilador -->
+  <div id="modal-tempVent" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#1a1d29] rounded-xl w-full max-w-sm p-6 relative animate-fade-in shadow-2xl">
+      <button class="closeModal absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+      
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">🌡️</div>
+        <h3 class="text-xl font-bold text-white">Temp. máx ventilador</h3>
+        <p class="text-sm text-gray-400 mt-1">Temperatura de activación</p>
+      </div>
+
+      <div class="mb-6">
+        <input 
+          type="number" 
+          id="input-tempVent"
+          min="-10"
+          max="50"
+          class="w-full px-4 py-3 bg-[#0f1117] border-2 border-gray-700 rounded-lg text-white text-center text-2xl font-bold focus:border-blue-500 focus:outline-none"
+          value="16"
+        />
+        <p class="text-xs text-gray-500 mt-2 text-center">Rango: -10 a 50°C</p>
+      </div>
+
+      <button class="saveBtn w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 active:scale-95 transition" data-config="tempVent">
+        💾 Guardar cambios
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Temperatura mínima luz -->
+  <div id="modal-tempLuz" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div class="bg-[#1a1d29] rounded-xl w-full max-w-sm p-6 relative animate-fade-in shadow-2xl">
+      <button class="closeModal absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+      
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">💡</div>
+        <h3 class="text-xl font-bold text-white">Temp. mín luz</h3>
+        <p class="text-sm text-gray-400 mt-1">Temperatura de activación</p>
+      </div>
+
+      <div class="mb-6">
+        <input 
+          type="number" 
+          id="input-tempLuz"
+          min="-10"
+          max="50"
+          class="w-full px-4 py-3 bg-[#0f1117] border-2 border-gray-700 rounded-lg text-white text-center text-2xl font-bold focus:border-blue-500 focus:outline-none"
+          value="26"
+        />
+        <p class="text-xs text-gray-500 mt-2 text-center">Rango: -10 a 50°C</p>
+      </div>
+
+      <button class="saveBtn w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 active:scale-95 transition" data-config="tempLuz">
+        💾 Guardar cambios
+      </button>
+    </div>
+  </div>
 </Layout>
 
 <script>
-  // Actualizar valor del slider en tiempo real
-  const intervalo = document.getElementById('intervalo') as HTMLInputElement;
-  const intervaloValue = document.getElementById('intervaloValue');
+  // 🔥 DATOS SIMULADOS (después vendrán de Firebase)
+  const configData = {
+    duracion_minutos: 2,
+    hora_programada: "21:06",
+    humedad_umbral_activacion: 65,
+    max_temp_ventilador: 16,
+    min_temp_luz: 26
+  };
 
-  intervalo?.addEventListener('input', (e) => {
-    const value = (e.target as HTMLInputElement).value;
-    if (intervaloValue) intervaloValue.textContent = `${value}s`;
+  // 🔐 SIMULACIÓN DE AUTENTICACIÓN (cambiar para probar)
+  const authState = {
+    isAuthenticated: true, // Cambiar a true para probar modo autenticado
+    user: { email: "admin" } // para probar como admin
+  };
+
+  // 🎨 ACTUALIZAR UI SEGÚN AUTH
+  function updateAuthUI() {
+    const authButton = document.getElementById('authButton');
+    const editButtons = document.querySelectorAll('.editBtn');
+
+    if (authState.isAuthenticated) {
+      // Cambiar botón a mostrar usuario
+      if (authButton) {
+        authButton.innerHTML = `
+          <div class="flex items-center justify-center space-x-3">
+            <span class="text-2xl">👤</span>
+            <div>
+              <p class="text-sm font-semibold text-green-800">
+                ${authState.user?.email || 'Usuario'}
+              </p>
+              <p class="text-xs text-green-600">
+                Sesión activa
+              </p>
+            </div>
+          </div>
+        `;
+        authButton.classList.remove('bg-orange-50', 'border-orange-200', 'hover:bg-orange-100');
+        authButton.classList.add('bg-green-50', 'border-green-200', 'hover:bg-green-100');
+      }
+
+      // Mostrar botones de editar si es admin
+      if (authState.user?.email === 'admin') {
+        editButtons.forEach(btn => btn.classList.remove('hidden'));
+      }
+    }
+  }
+
+  // 📂 ABRIR MODAL DE LOGIN (desde Navigation.astro)
+  const authButton = document.getElementById('authButton');
+  authButton?.addEventListener('click', () => {
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+      loginModal.classList.remove('hidden');
+    }
   });
 
-  // Aquí irá la lógica de Firebase Auth para habilitar/deshabilitar campos
-  console.log('Página de configuración cargada');
+  // 📝 ABRIR MODALES DE EDICIÓN
+  const editButtons = document.querySelectorAll('.editBtn');
+  editButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const config = (e.target as HTMLElement).dataset.config;
+      const modal = document.getElementById(`modal-${config}`);
+      if (modal) modal.classList.remove('hidden');
+    });
+  });
+
+  // ❌ CERRAR MODALES
+  const closeButtons = document.querySelectorAll('.closeModal');
+  closeButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const modal = (e.target as HTMLElement).closest('[id^="modal-"]');
+      if (modal) modal.classList.add('hidden');
+    });
+  });
+
+  // 💾 GUARDAR CAMBIOS
+  const saveButtons = document.querySelectorAll('.saveBtn');
+  saveButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const config = (e.target as HTMLElement).dataset.config;
+      const input = document.getElementById(`input-${config}`) as HTMLInputElement;
+      const valueDisplay = document.getElementById(`${config}-value`);
+
+      if (input && valueDisplay) {
+        const newValue = input.value;
+        valueDisplay.textContent = newValue;
+        
+        // Aquí iría la lógica de guardar en Firebase
+        console.log(`✅ Guardado: ${config} = ${newValue}`);
+        
+        // Cerrar modal
+        const modal = document.getElementById(`modal-${config}`);
+        if (modal) modal.classList.add('hidden');
+      }
+    });
+  });
+
+  // 🚀 INICIALIZAR
+  updateAuthUI();
+  console.log('✅ Configuración cargada - Datos simulados activos');
 </script>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+</style>

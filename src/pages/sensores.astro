@@ -28,11 +28,11 @@ import Navigation from '../components/Navigation.astro';
         </div>
       </div>
 
-      <!-- Modo, Fuente y Nivel de Agua (en fila) -->
-      <div class="grid grid-cols-3 gap-2 text-xs">
+      <!-- Modo, Fuente y Nivel de Agua (responsive) -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         <!-- Modo de Operación -->
         <div>
-          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Modo de Operación</p>
+          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Modo</p>
           <div id="modeBadge" class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
             <div class="flex flex-col items-center space-y-1">
               <span class="text-xl">🤖</span>
@@ -43,7 +43,7 @@ import Navigation from '../components/Navigation.astro';
 
         <!-- Fuente de Energía -->
         <div>
-          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Fuente de Energía</p>
+          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Fuente</p>
           <div id="sourceBadge" class="bg-purple-50 border border-purple-200 rounded-xl p-3 text-center">
             <div class="flex flex-col items-center space-y-1">
               <span class="text-xl">⚡</span>
@@ -52,13 +52,15 @@ import Navigation from '../components/Navigation.astro';
           </div>
         </div>
 
-        <!-- Nivel de Agua -->
-        <div>
-          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Nivel de Agua</p>
-          <div id="waterLevel" class="bg-green-50 border border-green-200 rounded-xl p-3">
-            <div class="flex flex-col items-center space-y-1">
-              <span class="text-2xl">💦</span>
-              <span class="text-green-700 text-sm font-semibold">Hay Agua</span>
+        <!-- Nivel de Agua (centrado abajo en móvil) -->
+        <div class="col-span-2 md:col-span-1 flex justify-center">
+          <div class="w-full md:w-auto">
+            <p class="text-xs text-gray-500 mb-2 font-medium text-center">Agua</p>
+            <div id="waterLevel" class="bg-green-50 border border-green-200 rounded-xl p-3 max-w-[200px] md:max-w-none mx-auto">
+              <div class="flex flex-col items-center space-y-1">
+                <span class="text-2xl">💦</span>
+                <span class="text-green-700 text-sm font-semibold">Hay Agua</span>
+              </div>
             </div>
           </div>
         </div>
@@ -72,10 +74,12 @@ import Navigation from '../components/Navigation.astro';
       <!-- Cards de sensores -->
       <div class="space-y-3">
         <!-- Temperatura del Aire -->
-        <div class="bg-gradient-to-br from-red-50 to-orange-50 p-4 rounded-xl shadow-sm border border-red-100">
+        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-              <span class="text-2xl">🌡️</span>
+              <div class="bg-red-100 p-2 rounded-lg">
+                <span class="text-2xl">🌡️</span>
+              </div>
               <h3 class="font-semibold text-gray-800 text-sm">Temperatura del Aire</h3>
             </div>
             <div class="text-2xl font-bold text-gray-900" id="temp_aire">
@@ -85,10 +89,12 @@ import Navigation from '../components/Navigation.astro';
         </div>
 
         <!-- Humedad del Aire -->
-        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl shadow-sm border border-blue-100">
+        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-              <span class="text-2xl">💧</span>
+              <div class="bg-blue-100 p-2 rounded-lg">
+                <span class="text-2xl">💧</span>
+              </div>
               <h3 class="font-semibold text-gray-800 text-sm">Humedad del Aire</h3>
             </div>
             <div class="text-2xl font-bold text-gray-900" id="hum_aire">
@@ -98,10 +104,12 @@ import Navigation from '../components/Navigation.astro';
         </div>
 
         <!-- Humedad del Suelo -->
-        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl shadow-sm border border-green-100">
+        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-              <span class="text-2xl">🌱</span>
+              <div class="bg-green-100 p-2 rounded-lg">
+                <span class="text-2xl">🌱</span>
+              </div>
               <h3 class="font-semibold text-gray-800 text-sm">Humedad del Suelo</h3>
             </div>
             <div class="text-2xl font-bold text-gray-900" id="hum_suelo">
@@ -111,10 +119,12 @@ import Navigation from '../components/Navigation.astro';
         </div>
 
         <!-- Luminosidad -->
-        <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-4 rounded-xl shadow-sm border border-yellow-100">
+        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-              <span class="text-2xl">💡</span>
+              <div class="bg-yellow-100 p-2 rounded-lg">
+                <span class="text-2xl">💡</span>
+              </div>
               <h3 class="font-semibold text-gray-800 text-sm">Luminosidad</h3>
             </div>
             <div class="text-2xl font-bold text-gray-900" id="luz">
@@ -124,10 +134,12 @@ import Navigation from '../components/Navigation.astro';
         </div>
 
         <!-- Temperatura del Suelo -->
-        <div class="bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-xl shadow-sm border border-orange-100">
+        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-              <span class="text-2xl">🌡️</span>
+              <div class="bg-orange-100 p-2 rounded-lg">
+                <span class="text-2xl">🌡️</span>
+              </div>
               <h3 class="font-semibold text-gray-800 text-sm">Temperatura del Suelo</h3>
             </div>
             <div class="text-2xl font-bold text-gray-900" id="temp_suelo">
@@ -153,11 +165,11 @@ import Navigation from '../components/Navigation.astro';
 
   // SIMULACIÓN DE DATOS (cambiarás esto con Firebase)
   const simulatedData = {
-    estado: "offline", // "online" o "offline"
+    estado: "online", // "online" o "offline"
     fecha_offline: "2025-11-17, 12:45",
-    modo_auto: false, // true = automático, false = manual
-    fuente: "externa", // "externa" o "interna"
-    nivel_agua: 0, // 1 = hay agua, 0 = no hay agua
+    modo_auto: true, // true = automático, false = manual
+    fuente: "interna", // "externa" o "interna"
+    nivel_agua: 1, // 1 = hay agua, 0 = no hay agua
     sensores: {
       temp_aire: "--",
       hum_aire: "--",
@@ -250,7 +262,7 @@ import Navigation from '../components/Navigation.astro';
     const waterLevel = document.getElementById('waterLevel');
     if (waterLevel) {
       if (nivel === 1) {
-        waterLevel.className = 'bg-green-50 border border-green-200 rounded-xl p-3';
+        waterLevel.className = 'bg-green-50 border border-green-200 rounded-xl p-3 max-w-[200px] md:max-w-none mx-auto';
         waterLevel.innerHTML = `
           <div class="flex flex-col items-center space-y-1">
             <span class="text-2xl">💦</span>
@@ -258,7 +270,7 @@ import Navigation from '../components/Navigation.astro';
           </div>
         `;
       } else {
-        waterLevel.className = 'bg-red-50 border border-red-200 rounded-xl p-3';
+        waterLevel.className = 'bg-red-50 border border-red-200 rounded-xl p-3 max-w-[200px] md:max-w-none mx-auto';
         waterLevel.innerHTML = `
           <div class="flex flex-col items-center space-y-1">
             <span class="text-2xl">💧</span>
