@@ -291,23 +291,79 @@ import Navigation from '../components/Navigation.astro';
 </Layout>
 
 <script>
-  // 🔥 DATOS SIMULADOS (después vendrán de Firebase)
-  const configData = {
-    duracion_minutos: 2,
-    hora_programada: "21:06",
-    humedad_umbral_activacion: 65,
-    max_temp_ventilador: 16,
-    min_temp_luz: 26
-  };
+  // ========================================
+  // 🔥 IMPORTAR FIREBASE
+  // ========================================
+  import { leerConfiguracion } from '../app/read.js';
 
-  // 🔐 SIMULACIÓN DE AUTENTICACIÓN (cambiar para probar)
+  console.log('✅ Página de configuración cargada');
+
+  // ========================================
+  // 📊 TIPOS DE DATOS
+  // ========================================
+  interface ConfiguracionData {
+    duracion_minutos: number;
+    hora_programada: string;
+    humedad_umbral_activacion: number;
+    max_temp_ventilador: number;
+    min_temp_luz: number;
+  }
+
+  // ========================================
+  // 📊 LEER DATOS EN TIEMPO REAL
+  // ========================================
+  
+  // Leer configuración desde Firebase
+  leerConfiguracion((datos: ConfiguracionData | null) => {
+    if (datos) {
+      console.log('⚙️ Datos recibidos de configuración:', datos);
+      updateConfigUI(datos);
+    }
+  });
+
+  // ========================================
+  // 🎨 FUNCIÓN PARA ACTUALIZAR UI
+  // ========================================
+  
+  function updateConfigUI(config: ConfiguracionData): void {
+    // Actualizar valores en las cards
+    const duracionValue = document.getElementById('duracion-value');
+    const horaValue = document.getElementById('hora-value');
+    const humedadValue = document.getElementById('humedad-value');
+    const tempVentValue = document.getElementById('tempVent-value');
+    const tempLuzValue = document.getElementById('tempLuz-value');
+
+    if (duracionValue) duracionValue.textContent = `${config.duracion_minutos}`;
+    if (horaValue) horaValue.textContent = config.hora_programada;
+    if (humedadValue) humedadValue.textContent = `${config.humedad_umbral_activacion}`;
+    if (tempVentValue) tempVentValue.textContent = `${config.max_temp_ventilador}`;
+    if (tempLuzValue) tempLuzValue.textContent = `${config.min_temp_luz}`;
+
+    // También actualizar los inputs de los modales
+    const inputDuracion = document.getElementById('input-duracion') as HTMLInputElement;
+    const inputHora = document.getElementById('input-hora') as HTMLInputElement;
+    const inputHumedad = document.getElementById('input-humedad') as HTMLInputElement;
+    const inputTempVent = document.getElementById('input-tempVent') as HTMLInputElement;
+    const inputTempLuz = document.getElementById('input-tempLuz') as HTMLInputElement;
+
+    if (inputDuracion) inputDuracion.value = `${config.duracion_minutos}`;
+    if (inputHora) inputHora.value = config.hora_programada;
+    if (inputHumedad) inputHumedad.value = `${config.humedad_umbral_activacion}`;
+    if (inputTempVent) inputTempVent.value = `${config.max_temp_ventilador}`;
+    if (inputTempLuz) inputTempLuz.value = `${config.min_temp_luz}`;
+  }
+
+  // ========================================
+  // 🔐 SIMULACIÓN DE AUTENTICACIÓN
+  // ========================================
+  
   const authState = {
     isAuthenticated: true, // Cambiar a true para probar modo autenticado
-    user: { email: "admin" } // para probar como admin
+    user: { email: "adm" } // para probar como admin
   };
 
   // 🎨 ACTUALIZAR UI SEGÚN AUTH
-  function updateAuthUI() {
+  function updateAuthUI(): void {
     const authButton = document.getElementById('authButton');
     const editButtons = document.querySelectorAll('.editBtn');
 
@@ -338,7 +394,11 @@ import Navigation from '../components/Navigation.astro';
     }
   }
 
-  // 📂 ABRIR MODAL DE LOGIN (desde Navigation.astro)
+  // ========================================
+  // 📂 EVENTOS DE UI (MODALES)
+  // ========================================
+  
+  // ABRIR MODAL DE LOGIN
   const authButton = document.getElementById('authButton');
   authButton?.addEventListener('click', () => {
     const loginModal = document.getElementById('loginModal');
@@ -347,7 +407,7 @@ import Navigation from '../components/Navigation.astro';
     }
   });
 
-  // 📝 ABRIR MODALES DE EDICIÓN
+  // ABRIR MODALES DE EDICIÓN
   const editButtons = document.querySelectorAll('.editBtn');
   editButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -357,7 +417,7 @@ import Navigation from '../components/Navigation.astro';
     });
   });
 
-  // ❌ CERRAR MODALES
+  // CERRAR MODALES
   const closeButtons = document.querySelectorAll('.closeModal');
   closeButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -366,7 +426,7 @@ import Navigation from '../components/Navigation.astro';
     });
   });
 
-  // 💾 GUARDAR CAMBIOS
+  // GUARDAR CAMBIOS (TODO: Conectar con Firebase Write)
   const saveButtons = document.querySelectorAll('.saveBtn');
   saveButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -378,8 +438,8 @@ import Navigation from '../components/Navigation.astro';
         const newValue = input.value;
         valueDisplay.textContent = newValue;
         
-        // Aquí iría la lógica de guardar en Firebase
-        console.log(`✅ Guardado: ${config} = ${newValue}`);
+        // TODO: Aquí iría la lógica de guardar en Firebase
+        console.log(`✅ Guardado (simulado): ${config} = ${newValue}`);
         
         // Cerrar modal
         const modal = document.getElementById(`modal-${config}`);
@@ -390,7 +450,6 @@ import Navigation from '../components/Navigation.astro';
 
   // 🚀 INICIALIZAR
   updateAuthUI();
-  console.log('✅ Configuración cargada - Datos simulados activos');
 </script>
 
 <style>

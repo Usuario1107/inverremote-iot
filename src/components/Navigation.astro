@@ -1,7 +1,7 @@
 ---
 ---
 
-<nav class="bg-white shadow-md sticky top-0 z-50">
+<nav class="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-200">
   <div class="px-4 py-3">
     <div class="flex justify-between items-center">
       <!-- Logo/Título -->
@@ -10,8 +10,8 @@
       </div>
 
       <!-- Menú hamburguesa -->
-      <button id="menuToggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button id="menuToggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition">
+        <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
@@ -41,7 +41,7 @@
     </div>
 
     <!-- Menú móvil -->
-    <div id="mobileMenu" class="hidden md:hidden mt-4 pb-2 space-y-2">
+    <div id="mobileMenu" class="hidden md:hidden mt-4 pb-2 space-y-2 bg-white/95 backdrop-blur-md rounded-lg">
       <a href="/" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition">
         🏠 Inicio
       </a>
@@ -51,17 +51,20 @@
       <a href="/configuracion" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition">
         ⚙️ Configuración
       </a>
-      <div class="pt-2 border-t border-gray-200">
-        <button id="loginBtnMobile" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition">
+      <div class="pt-2 border-t border-gray-200 flex justify-center pb-2">
+        <button id="loginBtnMobile" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition text-sm">
           Iniciar Sesión
         </button>
-        <button id="logoutBtnMobile" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition hidden">
+        <button id="logoutBtnMobile" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition text-sm hidden">
           Cerrar Sesión
         </button>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- Overlay para cerrar menú móvil -->
+<div id="mobileMenuOverlay" class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"></div>
 
 <!-- Modal de Login -->
 <div id="loginModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
@@ -176,39 +179,77 @@
 </style>
 
 <script>
-  // Toggle menú móvil
+  // ========================================
+  // 📱 MENÚ MÓVIL
+  // ========================================
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
 
+  // Abrir/cerrar menú móvil
   menuToggle?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+    const isHidden = mobileMenu?.classList.contains('hidden');
+    
+    if (isHidden) {
+      // Abrir menú
+      mobileMenu?.classList.remove('hidden');
+      mobileMenuOverlay?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Cerrar menú
+      mobileMenu?.classList.add('hidden');
+      mobileMenuOverlay?.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
   });
 
-  // Modal Login
+  // Cerrar menú al hacer clic en el overlay
+  mobileMenuOverlay?.addEventListener('click', () => {
+    mobileMenu?.classList.add('hidden');
+    mobileMenuOverlay?.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  });
+
+  // Cerrar menú al hacer clic en un enlace (navegación)
+  const mobileLinks = mobileMenu?.querySelectorAll('a');
+  mobileLinks?.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+      mobileMenuOverlay?.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    });
+  });
+
+  // ========================================
+  // 🔐 MODAL DE LOGIN (SIN FUNCIONALIDAD AÚN)
+  // ========================================
   const loginModal = document.getElementById('loginModal');
   const loginBtn = document.getElementById('loginBtn');
   const loginBtnMobile = document.getElementById('loginBtnMobile');
   const closeModal = document.getElementById('closeModal');
 
-  // Abrir modal
+  // Abrir modal (desktop)
   loginBtn?.addEventListener('click', () => {
     loginModal?.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // Prevenir scroll
-  });
-
-  loginBtnMobile?.addEventListener('click', () => {
-    loginModal?.classList.remove('hidden');
-    mobileMenu?.classList.add('hidden'); // Cerrar menú móvil
     document.body.style.overflow = 'hidden';
   });
 
-  // Cerrar modal
+  // Abrir modal (móvil)
+  loginBtnMobile?.addEventListener('click', () => {
+    loginModal?.classList.remove('hidden');
+    // Cerrar menú móvil primero
+    mobileMenu?.classList.add('hidden');
+    mobileMenuOverlay?.classList.add('hidden');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Cerrar modal con X
   closeModal?.addEventListener('click', () => {
     loginModal?.classList.add('hidden');
     document.body.style.overflow = 'auto';
   });
 
-  // Cerrar al hacer click fuera del modal
+  // Cerrar modal al hacer clic fuera
   loginModal?.addEventListener('click', (e) => {
     if (e.target === loginModal) {
       loginModal.classList.add('hidden');
@@ -216,22 +257,23 @@
     }
   });
 
-  // Prevenir submit del formulario (por ahora)
+  // ========================================
+  // ⚠️ FORMULARIO Y BOTONES SOCIALES (SIN FUNCIONALIDAD)
+  // ========================================
   const loginForm = document.getElementById('loginForm');
   loginForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('Login attempt...');
-    // Aquí irá la lógica de Firebase Auth
+    console.log('⚠️ Login todavía no implementado');
+    // TODO: Aquí irá Firebase Auth
   });
 
-  // Botones sociales (por ahora solo console.log)
   document.getElementById('googleBtn')?.addEventListener('click', () => {
-    console.log('Google login...');
-    // Aquí irá Firebase Google Auth
+    console.log('⚠️ Google login todavía no implementado');
+    // TODO: Firebase Google Auth
   });
 
   document.getElementById('appleBtn')?.addEventListener('click', () => {
-    console.log('Apple login...');
-    // Aquí irá Firebase Apple Auth
+    console.log('⚠️ Apple login todavía no implementado');
+    // TODO: Firebase Apple Auth
   });
 </script>
