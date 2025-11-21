@@ -1,4 +1,5 @@
 ---
+// src/components/Navigation.astro
 ---
 
 <nav class="bg-white shadow-md sticky top-0 z-50">
@@ -6,7 +7,7 @@
     <div class="flex justify-between items-center">
       <!-- Logo/Título -->
       <div class="flex items-center">
-        <h1 class="text-lg font-bold text-gray-800"> InverRemote</h1>
+        <h1 class="text-lg font-bold text-gray-800">🔌 InverRemote</h1>
       </div>
 
       <!-- Menú hamburguesa -->
@@ -63,6 +64,118 @@
   </div>
 </nav>
 
+<!-- Modal de Login -->
+<div id="loginModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+  <div class="bg-[#1a1d29] rounded-xl w-full max-w-sm p-6 relative animate-fade-in shadow-2xl">
+    <!-- Botón cerrar -->
+    <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Contenido del modal -->
+    <div class="space-y-5">
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-white mb-1">Iniciar Sesión</h2>
+        <p class="text-gray-400 text-xs">Accede para controlar tu sistema</p>
+      </div>
+
+      <!-- Formulario -->
+      <form id="loginForm" class="space-y-3">
+        <!-- Email -->
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1.5">
+            Correo electrónico
+          </label>
+          <input 
+            type="email" 
+            id="email"
+            placeholder="tu@correo.com"
+            class="w-full px-3 py-2.5 bg-[#0f1117] border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
+            required
+          />
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-xs font-medium text-gray-300 mb-1.5">
+            Contraseña
+          </label>
+          <input 
+            type="password" 
+            id="password"
+            placeholder="••••••••"
+            class="w-full px-3 py-2.5 bg-[#0f1117] border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
+            required
+          />
+        </div>
+
+        <!-- Botón Sign In -->
+        <button 
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold text-sm transition active:scale-95 mt-4"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-700"></div>
+        </div>
+        <div class="relative flex justify-center text-xs">
+          <span class="px-3 bg-[#1a1d29] text-gray-400">O continuar con</span>
+        </div>
+      </div>
+
+      <!-- Social Login Buttons -->
+      <div class="grid grid-cols-2 gap-2">
+        <button 
+          id="googleBtn"
+          class="flex items-center justify-center space-x-2 bg-[#0f1117] hover:bg-gray-800 border border-gray-700 text-white py-2.5 rounded-lg font-medium text-sm transition active:scale-95"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#EA4335" d="M5.27 9.76A7.5 7.5 0 0 1 12 4.5c1.98 0 3.73.73 5.1 1.93l3.58-3.58C18.42 1.08 15.4 0 12 0 7.31 0 3.25 2.69 1.27 6.56l3.99 3.2z"/>
+            <path fill="#34A853" d="M16.04 18.01A7.5 7.5 0 0 1 5.27 14.24l-4 3.2C3.25 21.31 7.31 24 12 24c3.19 0 6.14-1.19 8.39-3.14l-4.35-2.85z"/>
+            <path fill="#4A90E2" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.5h6.47c-.29 1.48-1.14 2.73-2.43 3.58l4.35 2.85c2.53-2.34 3.99-5.78 3.99-8.66z"/>
+            <path fill="#FBBC05" d="M5.27 14.24A7.5 7.5 0 0 1 4.5 12c0-.83.15-1.63.42-2.38l-4-3.2A11.47 11.47 0 0 0 0 12c0 1.85.45 3.61 1.27 5.2l4-3.2z"/>
+          </svg>
+          <span>Google</span>
+        </button>
+
+        <button 
+          id="appleBtn"
+          class="flex items-center justify-center space-x-2 bg-[#0f1117] hover:bg-gray-800 border border-gray-700 text-white py-2.5 rounded-lg font-medium text-sm transition active:scale-95"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+          </svg>
+          <span>Apple</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+</style>
+
 <script>
   // Toggle menú móvil
   const menuToggle = document.getElementById('menuToggle');
@@ -70,5 +183,56 @@
 
   menuToggle?.addEventListener('click', () => {
     mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Modal Login
+  const loginModal = document.getElementById('loginModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginBtnMobile = document.getElementById('loginBtnMobile');
+  const closeModal = document.getElementById('closeModal');
+
+  // Abrir modal
+  loginBtn?.addEventListener('click', () => {
+    loginModal?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevenir scroll
+  });
+
+  loginBtnMobile?.addEventListener('click', () => {
+    loginModal?.classList.remove('hidden');
+    mobileMenu?.classList.add('hidden'); // Cerrar menú móvil
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Cerrar modal
+  closeModal?.addEventListener('click', () => {
+    loginModal?.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  });
+
+  // Cerrar al hacer click fuera del modal
+  loginModal?.addEventListener('click', (e) => {
+    if (e.target === loginModal) {
+      loginModal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+  });
+
+  // Prevenir submit del formulario (por ahora)
+  const loginForm = document.getElementById('loginForm');
+  loginForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('Login attempt...');
+    // Aquí irá la lógica de Firebase Auth
+  });
+
+  // Botones sociales (por ahora solo console.log)
+  document.getElementById('googleBtn')?.addEventListener('click', () => {
+    console.log('Google login...');
+    // Aquí irá Firebase Google Auth
+  });
+
+  document.getElementById('appleBtn')?.addEventListener('click', () => {
+    console.log('Apple login...');
+    // Aquí irá Firebase Apple Auth
   });
 </script>
