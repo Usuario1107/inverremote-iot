@@ -8,102 +8,282 @@ import Navigation from '../components/Navigation.astro';
   <Navigation />
   
   <main class="px-4 py-6 pb-20">
+    <!-- Título -->
     <div class="text-center mb-6">
       <div class="text-5xl mb-3">📊</div>
       <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-        Sensores en Tiempo Real
+        Sensores
       </h1>
-      <p class="text-sm text-gray-600">
-        Datos actualizados automáticamente
-      </p>
     </div>
 
-    <!-- Estado de conexión -->
-    <div class="max-w-lg mx-auto mb-6">
-      <div id="connectionStatus" class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
-        <span class="text-yellow-700 text-sm font-medium">⏳ Conectando...</span>
-      </div>
-    </div>
-
-    <!-- Cards de sensores -->
-    <div class="space-y-4 max-w-lg mx-auto">
-      <!-- Temperatura -->
-      <div class="bg-gradient-to-br from-red-50 to-orange-50 p-5 rounded-xl shadow-md">
-        <div class="flex justify-between items-center mb-3">
-          <div class="flex items-center space-x-3">
-            <span class="text-3xl">🌡️</span>
-            <h3 class="font-semibold text-gray-800">Temperatura</h3>
+    <div class="max-w-lg mx-auto space-y-4">
+      <!-- Estado del Dispositivo -->
+      <div>
+        <p class="text-xs text-gray-500 mb-2 font-medium">Estado del Dispositivo</p>
+        <div id="connectionStatus" class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+          <div class="flex items-center justify-center space-x-2">
+            <span class="text-2xl">✓</span>
+            <span class="text-green-700 text-base font-semibold">Conectado</span>
           </div>
-          <span class="text-xs text-gray-500">Actualizado hace 2s</span>
-        </div>
-        <div class="text-4xl font-bold text-gray-900" id="temperatura">
-          --°C
         </div>
       </div>
 
-      <!-- Humedad -->
-      <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-5 rounded-xl shadow-md">
-        <div class="flex justify-between items-center mb-3">
-          <div class="flex items-center space-x-3">
-            <span class="text-3xl">💧</span>
-            <h3 class="font-semibold text-gray-800">Humedad</h3>
+      <!-- Modo, Fuente y Nivel de Agua (en fila) -->
+      <div class="grid grid-cols-3 gap-2 text-xs">
+        <!-- Modo de Operación -->
+        <div>
+          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Modo de Operación</p>
+          <div id="modeBadge" class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+            <div class="flex flex-col items-center space-y-1">
+              <span class="text-xl">🤖</span>
+              <span class="text-blue-700 text-sm font-semibold">Automático</span>
+            </div>
           </div>
-          <span class="text-xs text-gray-500">Actualizado hace 2s</span>
         </div>
-        <div class="text-4xl font-bold text-gray-900" id="humedad">
-          --%
-        </div>
-      </div>
 
-      <!-- Luz -->
-      <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-5 rounded-xl shadow-md">
-        <div class="flex justify-between items-center mb-3">
-          <div class="flex items-center space-x-3">
-            <span class="text-3xl">💡</span>
-            <h3 class="font-semibold text-gray-800">Luz</h3>
+        <!-- Fuente de Energía -->
+        <div>
+          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Fuente de Energía</p>
+          <div id="sourceBadge" class="bg-purple-50 border border-purple-200 rounded-xl p-3 text-center">
+            <div class="flex flex-col items-center space-y-1">
+              <span class="text-xl">⚡</span>
+              <span class="text-purple-700 text-sm font-semibold">Externa</span>
+            </div>
           </div>
-          <span class="text-xs text-gray-500">Actualizado hace 2s</span>
         </div>
-        <div class="text-4xl font-bold text-gray-900" id="luz">
-          -- lux
-        </div>
-      </div>
 
-      <!-- Movimiento -->
-      <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-5 rounded-xl shadow-md">
-        <div class="flex justify-between items-center mb-3">
-          <div class="flex items-center space-x-3">
-            <span class="text-3xl">🏃</span>
-            <h3 class="font-semibold text-gray-800">Movimiento</h3>
+        <!-- Nivel de Agua -->
+        <div>
+          <p class="text-xs text-gray-500 mb-2 font-medium text-center">Nivel de Agua</p>
+          <div id="waterLevel" class="bg-green-50 border border-green-200 rounded-xl p-3">
+            <div class="flex flex-col items-center space-y-1">
+              <span class="text-2xl">💦</span>
+              <span class="text-green-700 text-sm font-semibold">Hay Agua</span>
+            </div>
           </div>
-          <span class="text-xs text-gray-500">Actualizado hace 2s</span>
-        </div>
-        <div class="text-2xl font-bold text-gray-900" id="movimiento">
-          Sin detectar
         </div>
       </div>
-    </div>
 
-    <!-- Info -->
-    <div class="max-w-lg mx-auto mt-6 bg-blue-50 p-4 rounded-lg">
-      <p class="text-xs text-gray-600 text-center">
-        ℹ️ Los datos se actualizan automáticamente desde Firebase
-      </p>
+      <!-- Divisor -->
+      <div class="border-t border-gray-200 pt-4">
+        <p class="text-xs text-gray-500 mb-3 font-medium text-center">Datos de Sensores</p>
+      </div>
+
+      <!-- Cards de sensores -->
+      <div class="space-y-3">
+        <!-- Temperatura del Aire -->
+        <div class="bg-gradient-to-br from-red-50 to-orange-50 p-4 rounded-xl shadow-sm border border-red-100">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">🌡️</span>
+              <h3 class="font-semibold text-gray-800 text-sm">Temperatura del Aire</h3>
+            </div>
+            <div class="text-2xl font-bold text-gray-900" id="temp_aire">
+              --°C
+            </div>
+          </div>
+        </div>
+
+        <!-- Humedad del Aire -->
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl shadow-sm border border-blue-100">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">💧</span>
+              <h3 class="font-semibold text-gray-800 text-sm">Humedad del Aire</h3>
+            </div>
+            <div class="text-2xl font-bold text-gray-900" id="hum_aire">
+              --%
+            </div>
+          </div>
+        </div>
+
+        <!-- Humedad del Suelo -->
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl shadow-sm border border-green-100">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">🌱</span>
+              <h3 class="font-semibold text-gray-800 text-sm">Humedad del Suelo</h3>
+            </div>
+            <div class="text-2xl font-bold text-gray-900" id="hum_suelo">
+              --%
+            </div>
+          </div>
+        </div>
+
+        <!-- Luminosidad -->
+        <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-4 rounded-xl shadow-sm border border-yellow-100">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">💡</span>
+              <h3 class="font-semibold text-gray-800 text-sm">Luminosidad</h3>
+            </div>
+            <div class="text-2xl font-bold text-gray-900" id="luz">
+              -- lux
+            </div>
+          </div>
+        </div>
+
+        <!-- Temperatura del Suelo -->
+        <div class="bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-xl shadow-sm border border-orange-100">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">🌡️</span>
+              <h3 class="font-semibold text-gray-800 text-sm">Temperatura del Suelo</h3>
+            </div>
+            <div class="text-2xl font-bold text-gray-900" id="temp_suelo">
+              --°C
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-6">
+        <p class="text-xs text-gray-600 text-center">
+          ℹ️ Los datos se actualizan automáticamente desde Firebase
+        </p>
+      </div>
     </div>
   </main>
 </Layout>
 
 <script>
   // Aquí irá la lógica de Firebase para leer sensores
-  // Por ahora solo simulamos datos
   console.log('Página de sensores cargada');
-  
-  // Simular conexión exitosa
-  setTimeout(() => {
-    const status = document.getElementById('connectionStatus');
-    if (status) {
-      status.className = 'bg-green-50 border border-green-200 rounded-lg p-3 text-center';
-      status.innerHTML = '<span class="text-green-700 text-sm font-medium">✓ Conectado</span>';
+
+  // SIMULACIÓN DE DATOS (cambiarás esto con Firebase)
+  const simulatedData = {
+    estado: "offline", // "online" o "offline"
+    fecha_offline: "2025-11-17, 12:45",
+    modo_auto: false, // true = automático, false = manual
+    fuente: "externa", // "externa" o "interna"
+    nivel_agua: 0, // 1 = hay agua, 0 = no hay agua
+    sensores: {
+      temp_aire: "--",
+      hum_aire: "--",
+      hum_suelo: "--",
+      luz: "--",
+      temp_suelo: "--"
     }
-  }, 1000);
+  };
+
+  // Función para actualizar estado de conexión
+  function updateConnectionStatus(estado: string, fecha?: string) {
+    const statusDiv = document.getElementById('connectionStatus');
+
+    if (estado === "online") {
+      if (statusDiv) {
+        statusDiv.className = 'bg-green-50 border border-green-200 rounded-xl p-4 text-center';
+        statusDiv.innerHTML = `
+          <div class="flex items-center justify-center space-x-2">
+            <span class="text-2xl">✓</span>
+            <span class="text-green-700 text-base font-semibold">Conectado</span>
+          </div>
+        `;
+      }
+    } else {
+      if (statusDiv) {
+        statusDiv.className = 'bg-red-50 border border-red-200 rounded-xl p-4 text-center';
+        statusDiv.innerHTML = `
+          <div class="flex items-center justify-center space-x-2">
+            <span class="text-2xl">⚠️</span>
+            <span class="text-red-700 text-base font-semibold">Desconectado</span>
+          </div>
+          <p class="text-sm text-red-600 mt-2">
+            Última conexión: <span>${fecha || '--'}</span>
+          </p>
+        `;
+      }
+    }
+  }
+
+  // Función para actualizar modo
+  function updateMode(isAuto: boolean) {
+    const modeBadge = document.getElementById('modeBadge');
+    if (modeBadge) {
+      if (isAuto) {
+        modeBadge.className = 'bg-blue-50 border border-blue-200 rounded-xl p-3 text-center';
+        modeBadge.innerHTML = `
+          <div class="flex flex-col items-center space-y-1">
+            <span class="text-xl">🤖</span>
+            <span class="text-blue-700 text-sm font-semibold">Automático</span>
+          </div>
+        `;
+      } else {
+        modeBadge.className = 'bg-gray-50 border border-gray-200 rounded-xl p-3 text-center';
+        modeBadge.innerHTML = `
+          <div class="flex flex-col items-center space-y-1">
+            <span class="text-xl">👤</span>
+            <span class="text-gray-700 text-sm font-semibold">Manual</span>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Función para actualizar fuente
+  function updateSource(fuente: string) {
+    const sourceBadge = document.getElementById('sourceBadge');
+    if (sourceBadge) {
+      if (fuente === "externa") {
+        sourceBadge.className = 'bg-purple-50 border border-purple-200 rounded-xl p-3 text-center';
+        sourceBadge.innerHTML = `
+          <div class="flex flex-col items-center space-y-1">
+            <span class="text-xl">⚡</span>
+            <span class="text-purple-700 text-sm font-semibold">Externa</span>
+          </div>
+        `;
+      } else {
+        sourceBadge.className = 'bg-orange-50 border border-orange-200 rounded-xl p-3 text-center';
+        sourceBadge.innerHTML = `
+          <div class="flex flex-col items-center space-y-1">
+            <span class="text-xl">🔋</span>
+            <span class="text-orange-700 text-sm font-semibold">Interna</span>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Función para actualizar nivel de agua
+  function updateWaterLevel(nivel: number) {
+    const waterLevel = document.getElementById('waterLevel');
+    if (waterLevel) {
+      if (nivel === 1) {
+        waterLevel.className = 'bg-green-50 border border-green-200 rounded-xl p-3';
+        waterLevel.innerHTML = `
+          <div class="flex flex-col items-center space-y-1">
+            <span class="text-2xl">💦</span>
+            <span class="text-green-700 text-sm font-semibold">Hay Agua</span>
+          </div>
+        `;
+      } else {
+        waterLevel.className = 'bg-red-50 border border-red-200 rounded-xl p-3';
+        waterLevel.innerHTML = `
+          <div class="flex flex-col items-center space-y-1">
+            <span class="text-2xl">💧</span>
+            <span class="text-red-700 text-sm font-semibold">No Hay Agua</span>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Función para actualizar sensores
+  function updateSensors(sensores: any) {
+    document.getElementById('temp_aire')!.textContent = sensores.temp_aire !== "--" ? `${sensores.temp_aire}°C` : "--°C";
+    document.getElementById('hum_aire')!.textContent = sensores.hum_aire !== "--" ? `${sensores.hum_aire}%` : "--%";
+    document.getElementById('hum_suelo')!.textContent = sensores.hum_suelo !== "--" ? `${sensores.hum_suelo}%` : "--%";
+    document.getElementById('luz')!.textContent = sensores.luz !== "--" ? `${sensores.luz} lux` : "-- lux";
+    document.getElementById('temp_suelo')!.textContent = sensores.temp_suelo !== "--" ? `${sensores.temp_suelo}°C` : "--°C";
+  }
+
+  // Inicializar con datos simulados
+  updateConnectionStatus(simulatedData.estado, simulatedData.fecha_offline);
+  updateMode(simulatedData.modo_auto);
+  updateSource(simulatedData.fuente);
+  updateWaterLevel(simulatedData.nivel_agua);
+  updateSensors(simulatedData.sensores);
+
+  // TODO: Aquí conectarás Firebase y reemplazarás los datos simulados
 </script>
