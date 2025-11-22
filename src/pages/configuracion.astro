@@ -291,167 +291,323 @@ import Navigation from '../components/Navigation.astro';
 </Layout>
 
 <script>
-  // ========================================
-  // 🔥 IMPORTAR FIREBASE
-  // ========================================
-  import { leerConfiguracion } from '../app/read.js';
+//  IMPORTAR FIREBASE Y AUTH
+import { leerConfiguracion } from '../app/read.js';
+import { actualizarCampoConfiguracion } from '../app/write.js';
 
-  console.log('✅ Página de configuración cargada');
+//  TIPOS DE DATOS
 
-  // ========================================
-  // 📊 TIPOS DE DATOS
-  // ========================================
-  interface ConfiguracionData {
-    duracion_minutos: number;
-    hora_programada: string;
-    humedad_umbral_activacion: number;
-    max_temp_ventilador: number;
-    min_temp_luz: number;
+type ConfiguracionData = {
+  duracion_minutos: number;
+  hora_programada: string;
+  humedad_umbral_activacion: number;
+  max_temp_ventilador: number;
+  min_temp_luz: number;
+};
+
+type AuthState = {
+  isAuthenticated: boolean;
+  user: {
+    uid: string;
+    email: string;
+    displayName: string;
+    photoURL?: string;
+  } | null;
+};
+
+//  ESTADO DE AUTENTICACIÓN
+let currentAuthState: AuthState = {
+  isAuthenticated: false,
+  user: null
+};
+
+//  LEER DATOS EN TIEMPO REAL
+
+// Leer configuración desde Firebase
+leerConfiguracion((datos: ConfiguracionData | null) => {
+  if (datos) {
+    console.log('⚙️ Datos recibidos de configuración:', datos);
+    updateConfigUI(datos);
   }
+});
 
-  // ========================================
-  // 📊 LEER DATOS EN TIEMPO REAL
-  // ========================================
-  
-  // Leer configuración desde Firebase
-  leerConfiguracion((datos: ConfiguracionData | null) => {
-    if (datos) {
-      console.log('⚙️ Datos recibidos de configuración:', datos);
-      updateConfigUI(datos);
-    }
-  });
+//  FUNCIÓN PARA ACTUALIZAR UI
 
-  // ========================================
-  // 🎨 FUNCIÓN PARA ACTUALIZAR UI
-  // ========================================
-  
-  function updateConfigUI(config: ConfiguracionData): void {
-    // Actualizar valores en las cards
-    const duracionValue = document.getElementById('duracion-value');
-    const horaValue = document.getElementById('hora-value');
-    const humedadValue = document.getElementById('humedad-value');
-    const tempVentValue = document.getElementById('tempVent-value');
-    const tempLuzValue = document.getElementById('tempLuz-value');
+function updateConfigUI(config: ConfiguracionData): void {
+  // Actualizar valores en las cards
+  const duracionValue = document.getElementById('duracion-value');
+  const horaValue = document.getElementById('hora-value');
+  const humedadValue = document.getElementById('humedad-value');
+  const tempVentValue = document.getElementById('tempVent-value');
+  const tempLuzValue = document.getElementById('tempLuz-value');
 
-    if (duracionValue) duracionValue.textContent = `${config.duracion_minutos}`;
-    if (horaValue) horaValue.textContent = config.hora_programada;
-    if (humedadValue) humedadValue.textContent = `${config.humedad_umbral_activacion}`;
-    if (tempVentValue) tempVentValue.textContent = `${config.max_temp_ventilador}`;
-    if (tempLuzValue) tempLuzValue.textContent = `${config.min_temp_luz}`;
+  if (duracionValue) duracionValue.textContent = `${config.duracion_minutos}`;
+  if (horaValue) horaValue.textContent = config.hora_programada;
+  if (humedadValue) humedadValue.textContent = `${config.humedad_umbral_activacion}`;
+  if (tempVentValue) tempVentValue.textContent = `${config.max_temp_ventilador}`;
+  if (tempLuzValue) tempLuzValue.textContent = `${config.min_temp_luz}`;
 
-    // También actualizar los inputs de los modales
-    const inputDuracion = document.getElementById('input-duracion') as HTMLInputElement;
-    const inputHora = document.getElementById('input-hora') as HTMLInputElement;
-    const inputHumedad = document.getElementById('input-humedad') as HTMLInputElement;
-    const inputTempVent = document.getElementById('input-tempVent') as HTMLInputElement;
-    const inputTempLuz = document.getElementById('input-tempLuz') as HTMLInputElement;
+  // También actualizar los inputs de los modales
+  const inputDuracion = document.getElementById('input-duracion') as HTMLInputElement;
+  const inputHora = document.getElementById('input-hora') as HTMLInputElement;
+  const inputHumedad = document.getElementById('input-humedad') as HTMLInputElement;
+  const inputTempVent = document.getElementById('input-tempVent') as HTMLInputElement;
+  const inputTempLuz = document.getElementById('input-tempLuz') as HTMLInputElement;
 
-    if (inputDuracion) inputDuracion.value = `${config.duracion_minutos}`;
-    if (inputHora) inputHora.value = config.hora_programada;
-    if (inputHumedad) inputHumedad.value = `${config.humedad_umbral_activacion}`;
-    if (inputTempVent) inputTempVent.value = `${config.max_temp_ventilador}`;
-    if (inputTempLuz) inputTempLuz.value = `${config.min_temp_luz}`;
-  }
+  if (inputDuracion) inputDuracion.value = `${config.duracion_minutos}`;
+  if (inputHora) inputHora.value = config.hora_programada;
+  if (inputHumedad) inputHumedad.value = `${config.humedad_umbral_activacion}`;
+  if (inputTempVent) inputTempVent.value = `${config.max_temp_ventilador}`;
+  if (inputTempLuz) inputTempLuz.value = `${config.min_temp_luz}`;
+}
 
-  // ========================================
-  // 🔐 SIMULACIÓN DE AUTENTICACIÓN
-  // ========================================
-  
-  const authState = {
-    isAuthenticated: true, // Cambiar a true para probar modo autenticado
-    user: { email: "adm" } // para probar como admin
-  };
 
-  // 🎨 ACTUALIZAR UI SEGÚN AUTH
-  function updateAuthUI(): void {
-    const authButton = document.getElementById('authButton');
-    const editButtons = document.querySelectorAll('.editBtn');
+//  ESCUCHAR CAMBIOS DE AUTENTICACIÓN
 
-    if (authState.isAuthenticated) {
-      // Cambiar botón a mostrar usuario
-      if (authButton) {
-        authButton.innerHTML = `
-          <div class="flex items-center justify-center space-x-3">
-            <span class="text-2xl">👤</span>
-            <div>
-              <p class="text-sm font-semibold text-green-800">
-                ${authState.user?.email || 'Usuario'}
-              </p>
-              <p class="text-xs text-green-600">
-                Sesión activa
-              </p>
-            </div>
-          </div>
-        `;
-        authButton.classList.remove('bg-orange-50', 'border-orange-200', 'hover:bg-orange-100');
-        authButton.classList.add('bg-green-50', 'border-green-200', 'hover:bg-green-100');
-      }
+// Escucha el evento que dispara Navigation.astro cuando cambia el usuario
+window.addEventListener('userAuthChanged', ((event: CustomEvent<AuthState>) => {
+  currentAuthState = event.detail;
+  console.log('🔄 Estado de auth actualizado en configuración:', currentAuthState);
+  updateAuthUI();
+}) as EventListener);
 
-      // Mostrar botones de editar si es admin
-      if (authState.user?.email === 'admin') {
-        editButtons.forEach(btn => btn.classList.remove('hidden'));
-      }
-    }
-  }
 
-  // ========================================
-  // 📂 EVENTOS DE UI (MODALES)
-  // ========================================
-  
-  // ABRIR MODAL DE LOGIN
+// 🎨 ACTUALIZAR UI SEGÚN AUTH
+
+function updateAuthUI(): void {
   const authButton = document.getElementById('authButton');
-  authButton?.addEventListener('click', () => {
+  const editButtons = document.querySelectorAll('.editBtn');
+
+  if (currentAuthState.isAuthenticated && currentAuthState.user) {
+    // Usuario LOGUEADO
+    const user = currentAuthState.user;
+    
+    // Cambiar botón a mostrar usuario
+    if (authButton) {
+      authButton.innerHTML = `
+        <div class="flex items-center justify-center space-x-3">
+          <span class="text-2xl">👤</span>
+          <div>
+            <p class="text-sm font-semibold text-green-800">
+              ${user.displayName}
+            </p>
+            <p class="text-xs text-green-600">
+              Sesión activa
+            </p>
+          </div>
+        </div>
+      `;
+      authButton.classList.remove('bg-orange-50', 'border-orange-200', 'hover:bg-orange-100');
+      authButton.classList.add('bg-green-50', 'border-green-200', 'hover:bg-green-100');
+    }
+
+    // Mostrar TODOS los botones de editar
+    editButtons.forEach(btn => btn.classList.remove('hidden'));
+    
+  } else {
+    // Usuario NO LOGUEADO
+    
+    // Cambiar botón a estado "no autenticado"
+    if (authButton) {
+      authButton.innerHTML = `
+        <div class="flex items-center justify-center space-x-3">
+          <span class="text-2xl">🔒</span>
+          <div>
+            <p class="text-sm font-semibold text-orange-800">
+              Debes iniciar sesión para modificar
+            </p>
+            <p class="text-xs text-orange-600">
+              Toca aquí para autenticarte
+            </p>
+          </div>
+        </div>
+      `;
+      authButton.classList.remove('bg-green-50', 'border-green-200', 'hover:bg-green-100');
+      authButton.classList.add('bg-orange-50', 'border-orange-200', 'hover:bg-orange-100');
+    }
+
+    // Ocultar botones de editar
+    editButtons.forEach(btn => btn.classList.add('hidden'));
+  }
+}
+
+//  EVENTOS DE UI (MODALES)
+
+// ABRIR MODAL DE LOGIN
+const authButton = document.getElementById('authButton');
+authButton?.addEventListener('click', () => {
+  if (!currentAuthState.isAuthenticated) {
+    // Si NO está logueado, abrir modal de login
     const loginModal = document.getElementById('loginModal');
     if (loginModal) {
       loginModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  // Si YA está logueado, no hacer nada (solo muestra el estado)
+});
+
+const editButtons = document.querySelectorAll('.editBtn');
+editButtons.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const config = (e.target as HTMLElement).dataset.config;
+    const modal = document.getElementById(`modal-${config}`);
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
   });
+});
 
-  // ABRIR MODALES DE EDICIÓN
-  const editButtons = document.querySelectorAll('.editBtn');
-  editButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const config = (e.target as HTMLElement).dataset.config;
-      const modal = document.getElementById(`modal-${config}`);
-      if (modal) modal.classList.remove('hidden');
-    });
+// CERRAR MODALES
+const closeButtons = document.querySelectorAll('.closeModal');
+closeButtons.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const modal = (e.target as HTMLElement).closest('[id^="modal-"]');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
   });
+});
 
-  // CERRAR MODALES
-  const closeButtons = document.querySelectorAll('.closeModal');
-  closeButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const modal = (e.target as HTMLElement).closest('[id^="modal-"]');
-      if (modal) modal.classList.add('hidden');
-    });
-  });
+//  GUARDAR CAMBIOS EN FIREBASE
 
-  // GUARDAR CAMBIOS (TODO: Conectar con Firebase Write)
-  const saveButtons = document.querySelectorAll('.saveBtn');
-  saveButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const config = (e.target as HTMLElement).dataset.config;
-      const input = document.getElementById(`input-${config}`) as HTMLInputElement;
-      const valueDisplay = document.getElementById(`${config}-value`);
+const saveButtons = document.querySelectorAll('.saveBtn');
+saveButtons.forEach(btn => {
+  btn.addEventListener('click', async (e) => {
+    const configType = (e.target as HTMLElement).dataset.config;
+    const input = document.getElementById(`input-${configType}`) as HTMLInputElement;
+    const valueDisplay = document.getElementById(`${configType}-value`);
 
-      if (input && valueDisplay) {
-        const newValue = input.value;
-        valueDisplay.textContent = newValue;
-        
-        // TODO: Aquí iría la lógica de guardar en Firebase
-        console.log(`✅ Guardado (simulado): ${config} = ${newValue}`);
-        
-        // Cerrar modal
-        const modal = document.getElementById(`modal-${config}`);
-        if (modal) modal.classList.add('hidden');
+    if (!input || !valueDisplay) return;
+
+    const newValue = input.value;
+
+    // Mapear el tipo de config al nombre del campo en Firebase
+    const fieldMap: Record<string, string> = {
+      'duracion': 'duracion_minutos',
+      'hora': 'hora_programada',
+      'humedad': 'humedad_umbral_activacion',
+      'tempVent': 'max_temp_ventilador',
+      'tempLuz': 'min_temp_luz'
+    };
+
+    const fieldName = fieldMap[configType || ''];
+    
+    if (!fieldName) {
+      console.error('❌ Tipo de configuración no válido:', configType);
+      mostrarAlerta('Error: configuración no válida', 'error');
+      return;
+    }
+
+    // Convertir a número si no es la hora
+    const valorFinal = fieldName === 'hora_programada' ? newValue : Number(newValue);
+
+    console.log(`💾 Guardando ${fieldName} = ${valorFinal}`);
+
+    // Llamar a write.js para guardar en Firebase
+    const resultado = await actualizarCampoConfiguracion(fieldName, valorFinal);
+
+    if (resultado.success) {
+      console.log('✅ Guardado exitoso');
+      
+      // Actualizar la UI
+      valueDisplay.textContent = newValue;
+      
+      // Mostrar alerta de éxito
+      mostrarAlerta('✅ Configuración guardada correctamente', 'success');
+      
+      // Cerrar modal
+      const modal = document.getElementById(`modal-${configType}`);
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
       }
-    });
+    } else {
+      console.error('❌ Error al guardar:', resultado.error);
+      
+      // Mostrar alerta de error
+      mostrarAlerta(resultado.error || 'Error al guardar', 'error');
+    }
   });
+});
 
-  // 🚀 INICIALIZAR
-  updateAuthUI();
+// 📢 SISTEMA DE ALERTAS
+function mostrarAlerta(mensaje: string, tipo: 'success' | 'error' | 'warning' | 'info' = 'info'): void {
+  // Crear elemento de alerta
+  const alerta = document.createElement('div');
+  alerta.className = 'fixed top-4 right-4 z-[200] px-6 py-4 rounded-lg shadow-2xl animate-slide-in max-w-sm';
+  
+  // Colores según tipo
+  switch (tipo) {
+    case 'success':
+      alerta.classList.add('bg-green-600', 'text-white');
+      break;
+    case 'error':
+      alerta.classList.add('bg-red-600', 'text-white');
+      break;
+    case 'warning':
+      alerta.classList.add('bg-orange-600', 'text-white');
+      break;
+    default:
+      alerta.classList.add('bg-blue-600', 'text-white');
+  }
+  
+  alerta.innerHTML = `
+    <div class="flex items-center space-x-3">
+      <span class="text-lg">${tipo === 'success' ? '✅' : tipo === 'error' ? '❌' : '⚠️'}</span>
+      <p class="text-sm font-medium">${mensaje}</p>
+    </div>
+  `;
+  
+  document.body.appendChild(alerta);
+  
+  // Auto-remover después de 4 segundos
+  setTimeout(() => {
+    alerta.classList.add('animate-slide-out');
+    setTimeout(() => alerta.remove(), 300);
+  }, 4000);
+}
+
+// Estilos para animaciones de alerta
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slide-in {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-out {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+  
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+  }
+  
+  .animate-slide-out {
+    animation: slide-out 0.3s ease-in;
+  }
+`;
+document.head.appendChild(style);
+
+//  INICIALIZAR UI
+updateAuthUI();
 </script>
-
 <style>
   .animate-fade-in {
     animation: fadeIn 0.2s ease-out;

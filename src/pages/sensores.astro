@@ -1,5 +1,4 @@
 ---
-// src/pages/sensores.astro
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 ---
@@ -160,16 +159,10 @@ import Navigation from '../components/Navigation.astro';
 </Layout>
 
 <script>
-  // ========================================
-  // 🔥 IMPORTAR FIREBASE
-  // ========================================
+  //  IMPORTAR FIREBASE
   import { leerSensores, leerEstadoGeneral } from '../app/read.js';
 
-  console.log('✅ Página de sensores cargada');
-
-  // ========================================
-  // 📊 TIPOS DE DATOS
-  // ========================================
+  //  TIPOS DE DATOS
   interface SensoresData {
     temp_aire: number;
     hum_aire: number;
@@ -187,9 +180,7 @@ import Navigation from '../components/Navigation.astro';
     fuente: string;
   }
 
-  // ========================================
-  // 📊 LEER DATOS EN TIEMPO REAL
-  // ========================================
+  //  LEER DATOS EN TIEMPO REAL
   
   // Leer sensores
   leerSensores((datos: SensoresData | null) => {
@@ -213,9 +204,9 @@ import Navigation from '../components/Navigation.astro';
     }
   });
 
-  // ========================================
-  // 🎨 FUNCIONES PARA ACTUALIZAR UI
-  // ========================================
+ 
+  //  FUNCIONES PARA ACTUALIZAR UI
+
 
   // Función para actualizar estado de conexión
   function updateConnectionStatus(estado: string, fecha?: string): void {

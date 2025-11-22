@@ -1,6 +1,5 @@
 ---
 ---
-
 <nav class="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-200">
   <div class="px-4 py-3">
     <div class="flex justify-between items-center">
@@ -179,101 +178,303 @@
 </style>
 
 <script>
-  // ========================================
-  // 📱 MENÚ MÓVIL
-  // ========================================
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+//  IMPORTAR FUNCIONES DE AUTH
 
-  // Abrir/cerrar menú móvil
-  menuToggle?.addEventListener('click', () => {
-    const isHidden = mobileMenu?.classList.contains('hidden');
-    
-    if (isHidden) {
-      // Abrir menú
-      mobileMenu?.classList.remove('hidden');
-      mobileMenuOverlay?.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    } else {
-      // Cerrar menú
-      mobileMenu?.classList.add('hidden');
-      mobileMenuOverlay?.classList.add('hidden');
-      document.body.style.overflow = 'auto';
-    }
-  });
+import { loginConEmail, loginConGoogle, cerrarSesion, verificarUsuario } from '../app/auth.js';
 
-  // Cerrar menú al hacer clic en el overlay
-  mobileMenuOverlay?.addEventListener('click', () => {
+//  MENÚ MÓVIL
+
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+// Abrir/cerrar menú móvil
+menuToggle?.addEventListener('click', () => {
+  const isHidden = mobileMenu?.classList.contains('hidden');
+  
+  if (isHidden) {
+    mobileMenu?.classList.remove('hidden');
+    mobileMenuOverlay?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  } else {
+    mobileMenu?.classList.add('hidden');
+    mobileMenuOverlay?.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+});
+
+// Cerrar menú al hacer clic en el overlay
+mobileMenuOverlay?.addEventListener('click', () => {
+  mobileMenu?.classList.add('hidden');
+  mobileMenuOverlay?.classList.add('hidden');
+  document.body.style.overflow = 'auto';
+});
+
+// Cerrar menú al hacer clic en un enlace
+const mobileLinks = mobileMenu?.querySelectorAll('a');
+mobileLinks?.forEach(link => {
+  link.addEventListener('click', () => {
     mobileMenu?.classList.add('hidden');
     mobileMenuOverlay?.classList.add('hidden');
     document.body.style.overflow = 'auto';
   });
+});
 
-  // Cerrar menú al hacer clic en un enlace (navegación)
-  const mobileLinks = mobileMenu?.querySelectorAll('a');
-  mobileLinks?.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
-      mobileMenuOverlay?.classList.add('hidden');
-      document.body.style.overflow = 'auto';
-    });
-  });
+//  MODAL DE LOGIN
 
-  // ========================================
-  // 🔐 MODAL DE LOGIN (SIN FUNCIONALIDAD AÚN)
-  // ========================================
-  const loginModal = document.getElementById('loginModal');
-  const loginBtn = document.getElementById('loginBtn');
-  const loginBtnMobile = document.getElementById('loginBtnMobile');
-  const closeModal = document.getElementById('closeModal');
+const loginModal = document.getElementById('loginModal');
+const loginBtn = document.getElementById('loginBtn');
+const loginBtnMobile = document.getElementById('loginBtnMobile');
+const logoutBtn = document.getElementById('logoutBtn');
+const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+const closeModal = document.getElementById('closeModal');
 
-  // Abrir modal (desktop)
-  loginBtn?.addEventListener('click', () => {
-    loginModal?.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-  });
+// Abrir modal (desktop)
+loginBtn?.addEventListener('click', () => {
+  loginModal?.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+});
 
-  // Abrir modal (móvil)
-  loginBtnMobile?.addEventListener('click', () => {
-    loginModal?.classList.remove('hidden');
-    // Cerrar menú móvil primero
-    mobileMenu?.classList.add('hidden');
-    mobileMenuOverlay?.classList.add('hidden');
-    document.body.style.overflow = 'hidden';
-  });
+// Abrir modal (móvil)
+loginBtnMobile?.addEventListener('click', () => {
+  loginModal?.classList.remove('hidden');
+  mobileMenu?.classList.add('hidden');
+  mobileMenuOverlay?.classList.add('hidden');
+  document.body.style.overflow = 'hidden';
+});
 
-  // Cerrar modal con X
-  closeModal?.addEventListener('click', () => {
+// Cerrar modal con X
+closeModal?.addEventListener('click', () => {
+  loginModal?.classList.add('hidden');
+  document.body.style.overflow = 'auto';
+});
+
+// Cerrar modal al hacer clic fuera
+loginModal?.addEventListener('click', (e) => {
+  if (e.target === loginModal) {
+    loginModal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+});
+
+
+//  LOGIN CON EMAIL Y PASSWORD
+
+const loginForm = document.getElementById('loginForm');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+
+loginForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const email = emailInput?.value || '';
+  const password = passwordInput?.value || '';
+  
+  if (!email || !password) {
+    mostrarAlerta('⚠️ Por favor completa todos los campos', 'warning');
+    return;
+  }
+  
+  console.log('🔐 Intentando login con email...');
+  
+  const resultado = await loginConEmail(email, password);
+  
+  if (resultado.success) {
+    console.log('✅ Login exitoso:', resultado.user);
+    mostrarAlerta(resultado.message || '¡Bienvenido!', 'success');
+    
+    // Cerrar modal
     loginModal?.classList.add('hidden');
     document.body.style.overflow = 'auto';
-  });
+    
+    // Limpiar formulario
+    if (emailInput) emailInput.value = '';
+    if (passwordInput) passwordInput.value = '';
+  } else {
+    console.error('❌ Error en login:', resultado.error);
+    mostrarAlerta(resultado.error || 'Error al iniciar sesión', 'error');
+  }
+});
 
-  // Cerrar modal al hacer clic fuera
-  loginModal?.addEventListener('click', (e) => {
-    if (e.target === loginModal) {
-      loginModal.classList.add('hidden');
-      document.body.style.overflow = 'auto';
+
+//  LOGIN CON GOOGLE
+
+const googleBtn = document.getElementById('googleBtn');
+
+googleBtn?.addEventListener('click', async () => {
+  console.log('🔐 Intentando login con Google...');
+  
+  const resultado = await loginConGoogle();
+  
+  if (resultado.success) {
+    console.log('✅ Login exitoso con Google:', resultado.user);
+    mostrarAlerta(resultado.message || '¡Bienvenido!', 'success');
+    
+    // Cerrar modal
+    loginModal?.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  } else {
+    console.error('❌ Error en login con Google:', resultado.error);
+    
+    // No mostrar alerta si el usuario cerró el popup
+    if (resultado.errorCode !== 'auth/popup-closed-by-user' && 
+        resultado.errorCode !== 'auth/cancelled-popup-request') {
+      mostrarAlerta(resultado.error || 'Error al iniciar sesión', 'error');
     }
-  });
+  }
+});
 
-  // ========================================
-  // ⚠️ FORMULARIO Y BOTONES SOCIALES (SIN FUNCIONALIDAD)
-  // ========================================
-  const loginForm = document.getElementById('loginForm');
-  loginForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    console.log('⚠️ Login todavía no implementado');
-    // TODO: Aquí irá Firebase Auth
-  });
 
-  document.getElementById('googleBtn')?.addEventListener('click', () => {
-    console.log('⚠️ Google login todavía no implementado');
-    // TODO: Firebase Google Auth
-  });
+//  CERRAR SESIÓN (LOGOUT)
 
-  document.getElementById('appleBtn')?.addEventListener('click', () => {
-    console.log('⚠️ Apple login todavía no implementado');
-    // TODO: Firebase Apple Auth
-  });
+logoutBtn?.addEventListener('click', async () => {
+  console.log('🚪 Cerrando sesión...');
+  
+  const resultado = await cerrarSesion();
+  
+  if (resultado.success) {
+    console.log('✅ Sesión cerrada');
+    mostrarAlerta(resultado.message || 'Sesión cerrada', 'success');
+  } else {
+    console.error('❌ Error al cerrar sesión:', resultado.error);
+    mostrarAlerta(resultado.error || 'Error al cerrar sesión', 'error');
+  }
+});
+
+logoutBtnMobile?.addEventListener('click', async () => {
+  console.log('🚪 Cerrando sesión (móvil)...');
+  
+  const resultado = await cerrarSesion();
+  
+  if (resultado.success) {
+    console.log('✅ Sesión cerrada');
+    mostrarAlerta(resultado.message || 'Sesión cerrada', 'success');
+    
+    // Cerrar menú móvil
+    mobileMenu?.classList.add('hidden');
+    mobileMenuOverlay?.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  } else {
+    console.error('❌ Error al cerrar sesión:', resultado.error);
+    mostrarAlerta(resultado.error || 'Error al cerrar sesión', 'error');
+  }
+});
+
+// 👤 DETECTAR USUARIO LOGUEADO
+
+// Este observer se ejecuta automáticamente cuando hay cambios en la autenticación
+verificarUsuario((authState) => {
+  if (authState.isAuthenticated && authState.user) {
+    // Usuario LOGUEADO
+    const user = authState.user;
+    console.log('👤 Usuario detectado:', user.displayName);
+    
+    // Mostrar botones de logout
+    loginBtn?.classList.add('hidden');
+    loginBtnMobile?.classList.add('hidden');
+    logoutBtn?.classList.remove('hidden');
+    logoutBtnMobile?.classList.remove('hidden');
+    
+    // Mantener el texto "Cerrar Sesión"
+if (logoutBtn) {
+  logoutBtn.textContent = 'Cerrar Sesión';
+}
+if (logoutBtnMobile) {
+  logoutBtnMobile.textContent = 'Cerrar Sesión';
+}
+    
+    // Disparar evento personalizado para que otras páginas sepan que hay usuario
+    window.dispatchEvent(new CustomEvent('userAuthChanged', { 
+      detail: authState 
+    }));
+    
+  } else {
+    // Usuario NO LOGUEADO
+    console.log('🔓 No hay usuario autenticado');
+    
+    // Mostrar botones de login
+    loginBtn?.classList.remove('hidden');
+    loginBtnMobile?.classList.remove('hidden');
+    logoutBtn?.classList.add('hidden');
+    logoutBtnMobile?.classList.add('hidden');
+    
+    // Disparar evento personalizado
+    window.dispatchEvent(new CustomEvent('userAuthChanged', { 
+      detail: authState 
+    }));
+  }
+});
+
+//  SISTEMA DE ALERTAS
+
+function mostrarAlerta(mensaje, tipo = 'info') {
+  // Crear elemento de alerta
+  const alerta = document.createElement('div');
+  alerta.className = 'fixed top-4 right-4 z-[200] px-6 py-4 rounded-lg shadow-2xl animate-slide-in max-w-sm';
+  
+  // Colores según tipo
+  switch (tipo) {
+    case 'success':
+      alerta.classList.add('bg-green-600', 'text-white');
+      break;
+    case 'error':
+      alerta.classList.add('bg-red-600', 'text-white');
+      break;
+    case 'warning':
+      alerta.classList.add('bg-orange-600', 'text-white');
+      break;
+    default:
+      alerta.classList.add('bg-blue-600', 'text-white');
+  }
+  
+  alerta.innerHTML = `
+    <div class="flex items-center space-x-3">
+      <span class="text-lg">${tipo === 'success' ? '✅' : tipo === 'error' ? '❌' : '⚠️'}</span>
+      <p class="text-sm font-medium">${mensaje}</p>
+    </div>
+  `;
+  
+  document.body.appendChild(alerta);
+  
+  // Auto-remover después de 4 segundos
+  setTimeout(() => {
+    alerta.classList.add('animate-slide-out');
+    setTimeout(() => alerta.remove(), 300);
+  }, 4000);
+}
+
+// Estilos para animaciones de alerta
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slide-in {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-out {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+  
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+  }
+  
+  .animate-slide-out {
+    animation: slide-out 0.3s ease-in;
+  }
+`;
+document.head.appendChild(style);
 </script>
