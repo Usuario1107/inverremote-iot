@@ -70,79 +70,84 @@ import Navigation from '../components/Navigation.astro';
         <p class="text-xs text-gray-500 mb-3 font-medium text-center">Datos de Sensores</p>
     </div>
 
-    <!-- Cards de sensores -->
-    <div class="space-y-3">
+    <!-- Cards de sensores MEJORADAS -->
+    <div class="space-y-4">
         <!-- Temperatura del Aire -->
-        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
         <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-            <div class="bg-red-100 p-2 rounded-lg">
-                <span class="text-2xl">🌡️</span>
+            <div class="flex items-center space-x-4">
+            <div class="bg-white p-3 rounded-xl shadow-md">
+                <span class="text-3xl">🌡️</span>
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm">Temperatura del Aire</h3>
+            <div>
+                <h3 class="font-bold text-gray-800 text-base">Temperatura del Aire</h3>
+                <p class="text-xs text-gray-600">Ambiente</p>
             </div>
-            <div class="text-2xl font-bold text-gray-900" id="temp_aire">
-            --°C
+            </div>
+            <div class="text-right">
+            <div class="text-3xl font-black text-red-600" id="temp_aire">
+                --°C
+            </div>
             </div>
         </div>
         </div>
 
         <!-- Humedad del Aire -->
-        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200 p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
         <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-            <div class="bg-blue-100 p-2 rounded-lg">
-                <span class="text-2xl">💧</span>
+            <div class="flex items-center space-x-4">
+            <div class="bg-white p-3 rounded-xl shadow-md">
+                <span class="text-3xl">💧</span>
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm">Humedad del Aire</h3>
+            <div>
+                <h3 class="font-bold text-gray-800 text-base">Humedad del Aire</h3>
+                <p class="text-xs text-gray-600">Ambiente</p>
             </div>
-            <div class="text-2xl font-bold text-gray-900" id="hum_aire">
-            --%
+            </div>
+            <div class="text-right">
+            <div class="text-3xl font-black text-blue-600" id="hum_aire">
+                --%
+            </div>
             </div>
         </div>
         </div>
 
         <!-- Humedad del Suelo -->
-        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
         <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-            <div class="bg-green-100 p-2 rounded-lg">
-                <span class="text-2xl">🌱</span>
+            <div class="flex items-center space-x-4">
+            <div class="bg-white p-3 rounded-xl shadow-md">
+                <span class="text-3xl">🌱</span>
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm">Humedad del Suelo</h3>
+            <div>
+                <h3 class="font-bold text-gray-800 text-base">Humedad del Suelo</h3>
+                <p class="text-xs text-gray-600">Tierra</p>
             </div>
-            <div class="text-2xl font-bold text-gray-900" id="hum_suelo">
-            --%
+            </div>
+            <div class="text-right">
+            <div class="text-3xl font-black text-green-600" id="hum_suelo">
+                --%
+            </div>
             </div>
         </div>
         </div>
 
         <!-- Luminosidad -->
-        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-2 border-yellow-200 p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
         <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-            <div class="bg-yellow-100 p-2 rounded-lg">
-                <span class="text-2xl">💡</span>
+            <div class="flex items-center space-x-4">
+            <div class="bg-white p-3 rounded-xl shadow-md">
+                <span class="text-3xl">💡</span>
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm">Luminosidad</h3>
+            <div>
+                <h3 class="font-bold text-gray-800 text-base">Luminosidad</h3>
+                <p class="text-xs text-gray-600">Luz ambiental</p>
             </div>
-            <div class="text-2xl font-bold text-gray-900" id="luz">
-            -- lux
             </div>
-        </div>
-        </div>
-
-        <!-- Temperatura del Suelo -->
-        <div class="bg-white border-2 border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-            <div class="bg-orange-100 p-2 rounded-lg">
-                <span class="text-2xl">🌡️</span>
+            <div class="text-right">
+            <div class="text-3xl font-black text-yellow-600" id="luz">
+                -- %
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm">Temperatura del Suelo</h3>
-            </div>
-            <div class="text-2xl font-bold text-gray-900" id="temp_suelo">
-            --°C
             </div>
         </div>
         </div>
@@ -169,7 +174,6 @@ import Navigation from '../components/Navigation.astro';
     hum_suelo: number;
     nivel_agua: number;
     luz: number;
-    temp_suelo: number;
   }
 
   interface EstadoGeneralData {
@@ -314,12 +318,11 @@ import Navigation from '../components/Navigation.astro';
     const humAire = document.getElementById('hum_aire');
     const humSuelo = document.getElementById('hum_suelo');
     const luz = document.getElementById('luz');
-    const tempSuelo = document.getElementById('temp_suelo');
 
     if (tempAire) tempAire.textContent = sensores.temp_aire !== undefined ? `${sensores.temp_aire}°C` : "--°C";
     if (humAire) humAire.textContent = sensores.hum_aire !== undefined ? `${sensores.hum_aire}%` : "--%";
     if (humSuelo) humSuelo.textContent = sensores.hum_suelo !== undefined ? `${sensores.hum_suelo}%` : "--%";
-    if (luz) luz.textContent = sensores.luz !== undefined ? `${sensores.luz} lux` : "-- lux";
-    if (tempSuelo) tempSuelo.textContent = sensores.temp_suelo !== undefined ? `${sensores.temp_suelo}°C` : "--°C";
+    if (luz) luz.textContent = sensores.luz !== undefined ? `${sensores.luz} %` : "-- %";
   }
+  
 </script>

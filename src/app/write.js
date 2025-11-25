@@ -163,3 +163,72 @@ export async function guardarTempMaxVentilador(temperatura) {
 export async function guardarTempMinLuz(temperatura) {
   return await actualizarCampoConfiguracion('min_temp_luz', Number(temperatura));
 }
+
+// ========================================
+// 📡 ACTUALIZAR CAMPO DE ESTADO GENERAL
+// ========================================
+// Actualiza campos específicos en estado_general (estado, fecha_offline, etc.)
+export async function actualizarCampoEstadoGeneral(campo, valor) {
+  // 1. Verificar autenticación
+  const authState = obtenerUsuarioActual();
+  
+  if (!authState.isAuthenticated) {
+    console.error('❌ Usuario no autenticado');
+    return {
+      success: false,
+      error: 'Debes iniciar sesión para guardar cambios',
+      errorCode: 'auth/not-authenticated'
+    };
+  }
+  
+  try {
+    // 2. Referencia a estado_general en Firebase
+    const estadoRef = ref(database, 'invernadero/estado_general');
+    
+    // 3. Crear objeto con el campo a actualizar
+    const updates = {
+      [campo]: valor
+    };
+    
+    // 4. Actualizar solo ese campo
+    await update(estadoRef, updates);
+    
+    console.log(`✅ Campo '${campo}' actualizado a: ${valor}`);
+    
+    return {
+      success: true,
+      message: `${campo} actualizado correctamente`,
+      campo: campo,
+      valor: valor
+    };
+    
+  } catch (error) {
+    console.error(`❌ Error al actualizar ${campo}:`, error);
+    
+    // Mensajes de error personalizados
+    let errorMessage = 'Error al guardar el cambio';
+    
+    switch (error.code) {
+      case 'PERMISSION_DENIED':
+        errorMessage = 'No tienes permisos para modificar el estado general';
+        break;
+      case 'permission-denied':
+        errorMessage = 'Tu cuenta no está autorizada para escribir datos';
+        break;
+      case 'NETWORK_ERROR':
+        errorMessage = 'Error de conexión. Verifica tu internet';
+        break;
+      case 'auth/network-request-failed':
+        errorMessage = 'Error de red al conectar con Firebase';
+        break;
+      default:
+        errorMessage = error.message || 'Error desconocido al guardar';
+    }
+    
+    return {
+      success: false,
+      error: errorMessage,
+      errorCode: error.code
+    };
+  }
+}

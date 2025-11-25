@@ -92,7 +92,7 @@ import Navigation from '../components/Navigation.astro';
           <span class="text-lg text-gray-600 ml-1">%</span>
         </div>
         <p class="text-xs text-gray-500 mt-2 text-center">
-          Activa bomba si supera este valor
+          Activa bomba si la H esta por debajo
         </p>
       </div>
 
@@ -294,6 +294,7 @@ import Navigation from '../components/Navigation.astro';
 //  IMPORTAR FIREBASE Y AUTH
 import { leerConfiguracion } from '../app/read.js';
 import { actualizarCampoConfiguracion } from '../app/write.js';
+import { iniciarMonitoreoESP32 } from '../app/monitor.js';//nuevo
 
 //  TIPOS DE DATOS
 
@@ -607,6 +608,9 @@ document.head.appendChild(style);
 
 //  INICIALIZAR UI
 updateAuthUI();
+// 🔍 INICIAR MONITOREO DEL ESP32
+iniciarMonitoreoESP32();
+
 </script>
 <style>
   .animate-fade-in {
